@@ -1,0 +1,26 @@
+#SETTING UP EMSCRIPTEN
+
+* Dependencies
+sudo apt-get install python3
+sudo apt-get install cmake
+sudo apt-get install default-jre
+
+git clone https://github.com/emscripten-core/emsdk.git
+cd emsdk
+git pull
+
+** check the list of available packages with ./emsdk list (sdk-upstream-master-32bit)
+
+./emsdk install sdk-upstream-master-32bit
+./emsdk activate sdk-upstream-master-32bit
+source ./emsdk_env.sh
+
+chown -R pi /usr/bin/emsdk (if thats the directory of your install)
+
+sudo apt-get install nodejs
+sudo apt-get install npm
+
+** Navigate to the root directory of your emsdk (/usr/bin/emsdk/)
+sudo npm install acorn
+
+

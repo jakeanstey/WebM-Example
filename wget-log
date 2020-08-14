@@ -1,0 +1,11 @@
+--2020-08-13 20:53:10--  https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.58z8qFn42UMs42HfAWnUsAHaEK%26pid%3DApi
+Resolving external-content.duckduckgo.com (external-content.duckduckgo.com)... 40.89.244.234
+Connecting to external-content.duckduckgo.com (external-content.duckduckgo.com)|40.89.244.234|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [image/jpeg]
+Saving to: ‘index.html?u=https:%2F%2Ftse1.mm.bing.net%2Fth?id=OIP.58z8qFn42UMs42HfAWnUsAHaEK&pid=Api’
+
+           index.html?     [<=>                         ]       0  --.-KB/s               index.html?u=https:%2F     [ <=>                        ]  21.96K  --.-KB/s    in 0.001s  
+
+2020-08-13 20:53:11 (27.0 MB/s) - ‘index.html?u=https:%2F%2Ftse1.mm.bing.net%2Fth?id=OIP.58z8qFn42UMs42HfAWnUsAHaEK&pid=Api’ saved [22483]
+
