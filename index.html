@@ -36,12 +36,61 @@
 	  free_result: Module.cwrap('free_result', '', ['number'])
 	};	
 
-	var input;
+	var image, input, widthInput, heightInput, qualityInput, convertButton;
 
 	Module.onRuntimeInitialized = _ => {
 		input = document.getElementById('file-picker');
-		input.addEventListener('change', updateImageDisplay);	
+		widthInput = document.getElementById('width');
+		heightInput = document.getElementById('height');
+		qualityInput = document.getElementById('quality');
+		convertButton = document.getElementById('convert');
+
+		input.addEventListener('change', chooseFile);
+		convertButton.addEventListener('click', convertImage);	
 	};
+
+	async function chooseFile() {
+		const curFiles = input.files;
+                if(curFiles.length == 0)
+                {
+                        alert("No files selected");
+                }
+                else {  
+                        const file = curFiles[0];
+                        console.time("image")
+                        image = await loadImageFromFilePicker(file);
+                        console.timeLog("image");
+			widthInput.value = image.width;
+			heightInput.value = image.height;
+		}
+	}
+
+	async function convertImage() {
+		if(image) {
+			const p = api.create_buffer(widthInput.value, heightInput.value);
+	                Module.HEAP8.set(image.data, p);
+	                console.timeLog("image");
+	                api.encode(p, widthInput.value, heightInput.value, qualityInput.value);
+	                console.timeLog("image");
+	                const resultPointer = api.get_result_pointer();
+	                const resultSize = api.get_result_size();
+	                const resultView = new Uint8Array(Module.HEAP8.buffer, resultPointer);
+	                const result = new Uint8Array(resultView);
+	                api.free_result(resultPointer);
+	                console.timeLog("image");
+
+
+	                const blob = new Blob([result], {type: 'image/webp'});
+	                console.timeLog("image");
+	                const blobURL = URL.createObjectURL(blob);
+	                const img = document.createElement('img');
+	                img.src = blobURL;
+	                document.body.appendChild(img);
+
+	                api.destroy_buffer(p);
+	                console.timeEnd("image");
+		}
+	}
 
 	async function updateImageDisplay() {
 		const curFiles = input.files;
@@ -51,23 +100,31 @@
 		}
 		else {
 			const file = curFiles[0];
+			console.time("image")
 			const image = await loadImageFromFilePicker(file);
+			console.timeLog("image");
 			const p = api.create_buffer(image.width, image.height);
 			Module.HEAP8.set(image.data, p);
+			console.timeLog("image");
 			api.encode(p, image.width, image.height, 100);
+			console.timeLog("image");
 			const resultPointer = api.get_result_pointer();
 			const resultSize = api.get_result_size();
 			const resultView = new Uint8Array(Module.HEAP8.buffer, resultPointer, resultSize);
 			const result = new Uint8Array(resultView);
 			api.free_result(resultPointer);
+			console.timeLog("image");
 
+			
 			const blob = new Blob([result], {type: 'image/webp'});
+			console.timeLog("image");
 	                const blobURL = URL.createObjectURL(blob);
 	                const img = document.createElement('img');
 	                img.src = blobURL;
 	                document.body.appendChild(img);
 
-	                api.destroy_buffer(p);				
+	                api.destroy_buffer(p);	
+			console.timeEnd("image");			
 		}
 	}
 
@@ -76,6 +133,11 @@
   </head>
   <body>
     <header>Hello</header>
-	<input id="file-picker" type="File" />
+	<input id="file-picker" type="File" accept="image/*" />
+<!--	<input id="width" type="number" placeholder="Width" />
+	<input id="height" type="number" placeholder="Height" />-->
+	<label for="quality">Quality:</label>
+	<input id="quality" type="range" min="1" max="100" value="100" />
+	<input id="convert" type="button" value="Convert" />
   </body>
 </html>
